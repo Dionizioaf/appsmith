@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaflet Custom Image Map</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <style>
+      #map {
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      // Initialize the map
+      var map = L.map("map").setView([0, 0], 1);
+
+      // Set the custom image bounds
+      var bounds = [
+        [-100, -200],
+        [100, 200],
+      ];
+
+      // Load and display the custom image
+      L.imageOverlay(
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F7f%2F1c%2F9d%2F7f1c9d6276d8c0ece7e1f4beee78ff9f.jpg&f=1&nofb=1&ipt=4c806510e9e3fcf040ad1f3c9c0f39f15d1540386aaa13be64a6d2f92d80b073&ipo=images",
+        bounds
+      ).addTo(map);
+
+      var myIcon = L.icon({
+        iconUrl:
+          "https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-01-512.png",
+        iconSize: [48, 48],
+        iconAnchor: [48, 48],
+      });
+
+      // Set the maximum bounds to restrict panning outside the image
+      map.setMaxBounds(bounds);
+
+      const url = new URL(window.location.href);
+      const getParam = url.searchParams.get("dados");
+      
+      const parsedDados = decodeURIComponent(getParam)
+      console.log(":::",parsedDados);
+      console.log('---', parsedDados[0]);
+
+      console.log(parsedDados[0]['icon'])
+
+      for (const key in parsedDados) {
+        console.log(key);
+        if (key.icon === 1) {
+          L.marker([key.p1, key.p2]).addTo(map);
+        } else {
+          L.marker([key.p1, key.p2], { icon: myIcon }).addTo(map);
+        }
+      }
+
+      //   L.marker([55.505, 52.57], {icon: myIcon}).addTo(map);
+
+      // Add zoom control to the map
+      L.control.zoom({ position: "topright" }).addTo(map);
+    </script>
+  </body>
+</html>
